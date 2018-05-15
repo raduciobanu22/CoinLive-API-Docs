@@ -1,98 +1,49 @@
 ---
-title: API Reference
-
-language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
+title: CoinLive News API
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='https://coinlive.io/contact'>Contact us to get access</a>
 
-includes:
-  - errors
+<!-- includes:
+  - errors -->
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
-
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+Welcome to the CoinLive News API! We provide latest news from the crypto space, updated to the second. Our systems are constantly monitoring hundreds of sources like popular media outlets or social networks.
+Human discretion is then applied to filter out the noise. The result is an institutional-level news feed targeted to a professional audience.
 
 # Authentication
 
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
+> Authorization example:
 
 ```shell
-# With shell, you can just pass the correct header with each request
+# Just pass the correct header with each request
 curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+  -H "Authorization: Token token=<api_key>"
 ```
 
-```javascript
-const kittn = require('kittn');
+> Make sure to replace `<api_key>` with your API key.
 
-let api = kittn.authorize('meowmeowmeow');
-```
+CoinLive uses API keys to allow access to the API. You can send us an email at <a href="mailto:contact@coinlive.io">contact@coinlive.io</a> if you are interested in getting access and using our API.
 
-> Make sure to replace `meowmeowmeow` with your API key.
+CoinLive expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: Token token=api_key`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>api_key</code> with your personal API key.
 </aside>
 
-# Kittens
+# Articles
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Get latest news articles
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+curl "http://api.coinlive.io/v1/articles"
+  -H "Authorization: Token token=api_key"
 ```
 
 > The above command returns JSON structured like this:
@@ -101,139 +52,122 @@ let kittens = api.kittens.get();
 [
   {
     "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "title": "A news article title",
+    "content": "News body",
+    "type": "news",
+    "created_at": "2018-04-16T14:46:51.610Z",
+    "updated_at": "2018-04-16T14:48:42.243Z",
+    "slug": "a-news-article",
+    "source_url": "https://example.com/a-news-article",
+    "tags": [
+        {
+            "id": 1,
+            "name": "BTC",
+            "slug": "btc",
+            "created_at": "2018-02-11T11:30:06.233Z",
+            "updated_at": "2018-02-11T11:30:06.233Z",
+            "icon_class": null,
+            "priority": 1
+        }
+    ]
   },
   {
     "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
+    "title": "Another news article",
+    "content": "News body",
+    "type": "news",
+    "created_at": "2018-04-14T03:57:31.600Z",
+    "updated_at": "2018-04-14T03:57:31.600Z",
+    "slug": "another-one",
+    "source_url": "https://example.com/another-news-article",
+    "tags": [
+      {
+        "id": 101,
+        "name": "BTC",
+        "slug": "btc",
+        "created_at": "2018-02-11T11:30:06.233Z",
+        "updated_at": "2018-02-11T11:30:06.233Z",
+        "icon_class": null,
+        "priority": 1
+      },
+      {
+        "id": 203,
+        "name": "REC",
+        "slug": "rec",
+        "created_at": "2018-01-26T09:29:20.119Z",
+        "updated_at": "2018-01-26T09:29:20.119Z",
+        "icon_class": null,
+        "priority": 3
+      }
+    ]
+  },
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves the latest news articles.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET http://api.coinlive.io/v1/articles`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+<code>limit</code> *optional* | 50 | Limit the returned results. Accepted range: 1 to 50.
+<code>last_id</code> *optional* | null | Filters all articles published after the one provided.
+<code>tags[]</code> *optional* | null| Filter articles using tags. This parameter should be provided as array. Accepted values are tags names. See the /tags endpoint.
 
-<aside class="success">
+<!-- <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
-</aside>
+</aside> -->
 
-## Get a Specific Kitten
+# Tags
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get the list of available tags
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+curl "http://api.coinlive.io/v1/tags"
+  -H "Authorization: Token token=api_key"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+[
+    {
+        "id": 878,
+        "name": "BTC",
+        "slug": "btc",
+        "created_at": "2018-02-17T08:41:44.113Z",
+        "updated_at": "2018-02-20T15:45:52.479Z",
+        "icon_class": null,
+        "priority": 1
+    },
+    {
+        "id": 2,
+        "name": "LTC",
+        "slug": "ltc",
+        "created_at": "2018-01-25T10:12:06.734Z",
+        "updated_at": "2018-02-20T15:45:52.479Z",
+        "icon_class": null,
+        "priority": 1
+    },
+    {
+        "id": 14,
+        "name": "ADA",
+        "slug": "ada",
+        "created_at": "2018-01-26T06:06:45.918Z",
+        "updated_at": "2018-02-20T15:45:52.479Z",
+        "icon_class": null,
+        "priority": 1
+    },
+    ...
+]
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+This endpoint retrieves the list of available tags.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
-
+`GET http://api.coinlive.io/v1/tags`
